@@ -9,4 +9,3 @@ parameters:
         - database
     excludePaths:
         - app/Shared/Console/MakeModule.php
-    treatPhpDocCommentsAsPhpDoc: true
