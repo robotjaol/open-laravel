@@ -80,7 +80,6 @@ final class TableQuery
     /**
      * Apply a LIKE search across columns with wildcard characters in the input escaped.
      *
-     * @param  EloquentBuilder|QueryBuilder  $query
      * @param  list<string>  $columns
      */
     public function applySearch(EloquentBuilder|QueryBuilder $query, array $columns): void
