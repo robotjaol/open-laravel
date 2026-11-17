@@ -15,11 +15,12 @@ Date: 2026-11-18. Updated after each CI run (see bottom).
 | Frontend quality gates | `npm run check`: eslint, prettier, tsc, vitest 44 tests passed (executed locally 2026-11-18) |
 | Contrast (WCAG) | `tests/js/contrast.test.ts` (executed locally) |
 | Static preview + screenshots | `npm run build:preview`, `npm run preview:screenshots`; navigation and reload checked with headless Chrome (executed locally) |
-| Backend features (auth, RBAC, audit, settings, notifications, API, modules, seeders) | Code present; PHPUnit suite written (~60 tests) |
+| Backend features (auth, RBAC, audit, settings, notifications, API, modules, seeders) | PHPUnit: 64 tests passed on PHP 8.3 and 8.4 in GitHub Actions (run on commit c682f7f) |
 | Docker, Compose, workflows, docs, research, ADRs, threat model, OpenAPI | Files present; workflows run in CI |
 
 ## Partial
-- Backend test results: **pending first CI run** (PHP dependencies could not be installed locally: package registry blocked by the sandbox network policy).
+- Backend verification ran only in CI, not locally (PHP dependencies could not be installed in the build sandbox: package registry blocked by network policy).
+- GitHub Pages must be enabled by the repository owner (Settings > Pages > Source: GitHub Actions) before the live preview URL works.
 - E2E: spec written; runs on pull requests and manually, not on every push.
 
 ## Not implemented
@@ -36,4 +37,18 @@ Local execution of PHP/Composer-dependent steps (PHPUnit, Larastan, Pint, migrat
 - `spatie/laravel-permission ^8` and Laravel 13 compatibility is assumed from constraints and confirmed only by CI.
 
 ## CI log
-(see below, appended as runs complete)
+Commit c682f7f, workflow results (GitHub Actions):
+
+| Workflow / job | Result |
+| --- | --- |
+| PHP: tests (PHP 8.3) | success, 64 tests |
+| PHP: tests (PHP 8.4) | success, 64 tests |
+| PHP: migrate and rollback on PostgreSQL 17 | success |
+| PHP: Pint (style) and Larastan level 5 | success |
+| Frontend: eslint, prettier, tsc, vitest | success |
+| Docker: image build and smoke test | success |
+| Security: dependency audit | success |
+| E2E (Playwright) | not run; triggers on pull requests and manually |
+| Deploy preview | fails until GitHub Pages is enabled |
+
+A coverage percentage is not stated: it is published only as a CI artifact and was not read.

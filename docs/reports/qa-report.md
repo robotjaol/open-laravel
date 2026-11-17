@@ -11,6 +11,6 @@ Scope: what was actually executed.
 | Production build and preview build | pass | local |
 | Preview navigation/reload in headless Chrome | pass | local |
 | `php -l` on every PHP file | pass | local |
-| PHPUnit, Larastan, Pint, PostgreSQL migrate/rollback | see CI | GitHub Actions |
+| PHPUnit, Larastan, Pint, PostgreSQL migrate/rollback | passed on commit c682f7f (64 PHPUnit tests, PHP 8.3 and 8.4) | GitHub Actions |
 | Playwright E2E | not run yet | CI (PR/manual) |
 | Manual accessibility audit | not performed | - |
