@@ -45,7 +45,7 @@ class UserManagementTest extends TestCase
 
         $created = User::query()->where('email', 'created@example.com')->firstOrFail();
         $this->assertTrue($created->hasRole('Viewer'));
-        $this->assertDatabaseHas('audit_logs', ['event' => 'created', 'subject_type' => User::class]);
+        $this->assertDatabaseHas('audit_logs', ['event' => 'user.created', 'subject_type' => User::class]);
     }
 
     public function test_duplicate_email_is_rejected(): void

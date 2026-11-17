@@ -56,7 +56,7 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo_sqlite, intl, bcmath
       - run: composer install --no-interaction --prefer-dist --no-progress
-      - run: vendor/bin/pint --test
+      - run: vendor/bin/pint --test -v
       - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
 
   migrate-postgres:
