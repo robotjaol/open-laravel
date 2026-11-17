@@ -2,7 +2,9 @@
 
 namespace Tests\Integration;
 
+use App\Core\Authentication\Models\User;
 use App\Core\Authorization\AuthorizationSynchronizer;
+use Database\Seeders\DatabaseSeeder;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -36,14 +38,14 @@ class AuthorizationSyncTest extends TestCase
         $_ENV['SEED_ADMIN_PASSWORD'] = 'Seed-Pass-123456!';
 
         try {
-            $this->seed(\Database\Seeders\DatabaseSeeder::class);
-            $this->seed(\Database\Seeders\DatabaseSeeder::class);
+            $this->seed(DatabaseSeeder::class);
+            $this->seed(DatabaseSeeder::class);
         } finally {
             putenv('SEED_ADMIN_EMAIL');
             putenv('SEED_ADMIN_PASSWORD');
             unset($_ENV['SEED_ADMIN_EMAIL'], $_ENV['SEED_ADMIN_PASSWORD']);
         }
 
-        $this->assertSame(1, \App\Core\Authentication\Models\User::query()->where('email', 'root@example.com')->count());
+        $this->assertSame(1, User::query()->where('email', 'root@example.com')->count());
     }
 }

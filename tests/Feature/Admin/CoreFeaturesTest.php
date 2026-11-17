@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Core\Audit\AuditLogger;
+use App\Core\Audit\Models\AuditLog;
 use App\Core\Authentication\Models\User;
 use App\Core\Notifications\SystemNotification;
 use App\Core\Settings\SettingsService;
@@ -34,7 +35,7 @@ class CoreFeaturesTest extends TestCase
     {
         app(AuditLogger::class)->log('test.event', 'Redaction check', null, ['password' => 'hunter2', 'nested' => ['token' => 'abc'], 'ok' => 'visible']);
 
-        $log = \App\Core\Audit\Models\AuditLog::query()->where('event', 'test.event')->firstOrFail();
+        $log = AuditLog::query()->where('event', 'test.event')->firstOrFail();
         $this->assertStringNotContainsString('hunter2', json_encode($log->properties));
         $this->assertStringNotContainsString('abc', json_encode($log->properties));
         $this->assertSame('visible', $log->properties['ok']);
@@ -43,7 +44,7 @@ class CoreFeaturesTest extends TestCase
     public function test_audit_log_entries_are_immutable(): void
     {
         app(AuditLogger::class)->log('test.immutable', 'x');
-        $log = \App\Core\Audit\Models\AuditLog::query()->firstOrFail();
+        $log = AuditLog::query()->firstOrFail();
 
         $this->expectException(\LogicException::class);
         $log->update(['description' => 'tampered']);
