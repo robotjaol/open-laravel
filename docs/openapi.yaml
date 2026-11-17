@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  title: Open Laravel API
+  version: 1.0.0
+  description: Versioned REST API. All endpoints except token creation require a Bearer token.
+servers:
+  - url: http://localhost:8000/api/v1
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+  schemas:
+    Error:
+      type: object
+      required: [message, code]
+      properties:
+        message: { type: string }
+        code: { type: string, enum: [validation_failed, unauthenticated, forbidden, account_inactive, not_found, business_rule_violation, method_not_allowed, session_expired, too_many_requests, server_error, http_error] }
+        errors: { type: object, additionalProperties: { type: array, items: { type: string } } }
+    Project:
+      type: object
+      properties:
+        id: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        description: { type: [string, 'null'] }
+        status: { type: string, enum: [planned, active, on_hold, completed] }
+        owner: { type: [object, 'null'], properties: { id: { type: integer }, name: { type: string } } }
+        starts_on: { type: [string, 'null'], format: date }
+        due_on: { type: [string, 'null'], format: date }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    ProjectInput:
+      type: object
+      required: [code, name, status]
+      properties:
+        code: { type: string, maxLength: 32, pattern: '^[A-Za-z0-9_-]+$' }
+        name: { type: string, maxLength: 255 }
+        description: { type: [string, 'null'], maxLength: 5000 }
+        status: { type: string, enum: [planned, active, on_hold, completed] }
+        owner_id: { type: [integer, 'null'] }
+        starts_on: { type: [string, 'null'], format: date }
+        due_on: { type: [string, 'null'], format: date }
+  responses:
+    Unauthenticated: { description: Missing or invalid token, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Forbidden: { description: Not permitted, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    NotFound: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Invalid: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+security:
+  - bearer: []
+paths:
+  /auth/token:
+    post:
+      summary: Issue an API token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                device_name: { type: string, maxLength: 100 }
+      responses:
+        '201':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: object, properties: { token: { type: string }, token_type: { type: string, enum: [Bearer] } } }
+        '422': { $ref: '#/components/responses/Invalid' }
+    delete:
+      summary: Revoke the current token
+      responses:
+        '204': { description: Revoked }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /me:
+    get:
+      summary: Current user with roles and permissions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id: { type: integer }
+                      name: { type: string }
+                      email: { type: string }
+                      roles: { type: array, items: { type: string } }
+                      permissions: { type: array, items: { type: string } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /projects:
+    get:
+      summary: List projects (permission projects.view)
+      parameters:
+        - { name: search, in: query, schema: { type: string } }
+        - { name: sort, in: query, schema: { type: string, enum: [code, name, status, due_on, updated_at] } }
+        - { name: direction, in: query, schema: { type: string, enum: [asc, desc] } }
+        - { name: per_page, in: query, schema: { type: integer, enum: [10, 25, 50, 100] } }
+        - { name: 'filter[status]', in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/Project' } }
+                  links: { type: object }
+                  meta: { type: object }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      summary: Create a project (permission projects.create)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ProjectInput' } } } }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Project' } } } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Invalid' }
+  /projects/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    get:
+      summary: Show a project
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Project' } } } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      summary: Update a project (permission projects.update)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ProjectInput' } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Project' } } } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Invalid' }
+    delete:
+      summary: Delete a project (permission projects.delete)
+      responses:
+        '204': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }

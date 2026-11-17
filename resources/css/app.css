@@ -1,0 +1,169 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens. Every colour is defined once per theme as a CSS variable and
+ * exposed to Tailwind through @theme inline, so components never hard-code colours.
+ * Contrast pairs are verified by `npm run test` (tests/js/contrast.test.ts).
+ */
+:root {
+    --background: oklch(0.985 0.003 250);
+    --foreground: oklch(0.2 0.02 255);
+    --surface: oklch(1 0 0);
+    --surface-foreground: oklch(0.2 0.02 255);
+    --muted: oklch(0.955 0.006 250);
+    --muted-foreground: oklch(0.45 0.02 255);
+    --border: oklch(0.9 0.008 250);
+    --input: oklch(0.62 0.015 250);
+    --primary: oklch(0.47 0.09 200);
+    --primary-foreground: oklch(0.99 0 0);
+    --accent: oklch(0.94 0.03 200);
+    --accent-foreground: oklch(0.3 0.07 200);
+    --destructive: oklch(0.5 0.19 27);
+    --destructive-foreground: oklch(0.99 0 0);
+    --success: oklch(0.45 0.12 150);
+    --success-soft: oklch(0.95 0.04 150);
+    --warning: oklch(0.45 0.1 70);
+    --warning-soft: oklch(0.96 0.05 85);
+    --danger-soft: oklch(0.95 0.03 27);
+    --ring: oklch(0.55 0.12 200);
+    --sidebar: oklch(0.975 0.004 250);
+
+    --radius-control: 0.5rem;
+    --radius-card: 0.75rem;
+    --shadow-xs: 0 1px 2px 0 oklch(0.2 0.02 255 / 0.05);
+    --shadow-card: 0 1px 2px 0 oklch(0.2 0.02 255 / 0.06), 0 1px 1px 0 oklch(0.2 0.02 255 / 0.04);
+    --shadow-overlay:
+        0 12px 32px -8px oklch(0.2 0.02 255 / 0.25), 0 2px 6px 0 oklch(0.2 0.02 255 / 0.1);
+
+    --z-sticky: 20;
+    --z-sidebar: 30;
+    --z-dropdown: 50;
+    --z-overlay: 60;
+    --z-modal: 70;
+    --z-toast: 80;
+
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.dark {
+    --background: oklch(0.165 0.015 255);
+    --foreground: oklch(0.95 0.005 250);
+    --surface: oklch(0.2 0.018 255);
+    --surface-foreground: oklch(0.95 0.005 250);
+    --muted: oklch(0.25 0.018 255);
+    --muted-foreground: oklch(0.72 0.015 250);
+    --border: oklch(0.3 0.018 255);
+    --input: oklch(0.58 0.02 255);
+    --primary: oklch(0.78 0.11 195);
+    --primary-foreground: oklch(0.2 0.03 220);
+    --accent: oklch(0.28 0.04 200);
+    --accent-foreground: oklch(0.9 0.05 195);
+    --destructive: oklch(0.68 0.17 25);
+    --destructive-foreground: oklch(0.18 0.03 25);
+    --success: oklch(0.78 0.13 150);
+    --success-soft: oklch(0.27 0.05 150);
+    --warning: oklch(0.82 0.12 85);
+    --warning-soft: oklch(0.29 0.05 80);
+    --danger-soft: oklch(0.28 0.05 27);
+    --ring: oklch(0.75 0.12 195);
+    --sidebar: oklch(0.185 0.017 255);
+    --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.3);
+    --shadow-card: 0 1px 2px 0 oklch(0 0 0 / 0.35);
+    --shadow-overlay: 0 12px 32px -8px oklch(0 0 0 / 0.6), 0 2px 6px 0 oklch(0 0 0 / 0.4);
+}
+
+@theme inline {
+    --font-sans:
+        'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-surface: var(--surface);
+    --color-surface-foreground: var(--surface-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-success: var(--success);
+    --color-success-soft: var(--success-soft);
+    --color-warning: var(--warning);
+    --color-warning-soft: var(--warning-soft);
+    --color-danger-soft: var(--danger-soft);
+    --color-ring: var(--ring);
+    --color-sidebar: var(--sidebar);
+
+    --radius-control: var(--radius-control);
+    --radius-card: var(--radius-card);
+    --shadow-xs: var(--shadow-xs);
+    --shadow-card: var(--shadow-card);
+    --shadow-overlay: var(--shadow-overlay);
+
+    /* Type scale: size / line-height pairs. Body copy is 14px for dense enterprise screens. */
+    --text-xs: 0.75rem;
+    --text-xs--line-height: 1rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: 1.375rem;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: 1.625rem;
+    --text-xl: 1.375rem;
+    --text-xl--line-height: 1.75rem;
+    --text-2xl: 1.75rem;
+    --text-2xl--line-height: 2.125rem;
+}
+
+@layer base {
+    * {
+        border-color: var(--border);
+    }
+    html {
+        color-scheme: light;
+    }
+    html.dark {
+        color-scheme: dark;
+    }
+    body {
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        line-height: var(--text-sm--line-height);
+        -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+@utility tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Keep keyboard-focused elements clear of the sticky top bar (WCAG 2.4.11). */
+html {
+    scroll-padding-top: 4.5rem;
+}

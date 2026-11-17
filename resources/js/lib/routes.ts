@@ -1,0 +1,48 @@
+/** Central URL map. Keep in sync with routes/web.php. */
+export const routes = {
+    login: '/login',
+    logout: '/logout',
+    register: '/register',
+    forgotPassword: '/forgot-password',
+    resetPassword: '/reset-password',
+    verifyNotice: '/email/verify',
+    verifySend: '/email/verification-notification',
+    dashboard: '/dashboard',
+    users: {
+        index: '/users',
+        create: '/users/create',
+        edit: (id: number) => `/users/${id}/edit`,
+        update: (id: number) => `/users/${id}`,
+        destroy: (id: number) => `/users/${id}`,
+        status: (id: number) => `/users/${id}/status`,
+    },
+    roles: {
+        index: '/roles',
+        create: '/roles/create',
+        edit: (id: number) => `/roles/${id}/edit`,
+        update: (id: number) => `/roles/${id}`,
+        destroy: (id: number) => `/roles/${id}`,
+    },
+    permissions: { index: '/permissions', toggle: '/permissions/toggle' },
+    projects: {
+        index: '/projects',
+        create: '/projects/create',
+        edit: (id: number) => `/projects/${id}/edit`,
+        update: (id: number) => `/projects/${id}`,
+        destroy: (id: number) => `/projects/${id}`,
+    },
+    activity: '/activity',
+    notifications: {
+        index: '/notifications',
+        read: (id: string) => `/notifications/${id}/read`,
+        readAll: '/notifications/read-all',
+        destroy: (id: string) => `/notifications/${id}`,
+    },
+    settings: {
+        profile: '/settings/profile',
+        password: '/settings/password',
+        sessions: '/settings/sessions',
+        application: '/settings/application',
+    },
+    api: '/api-overview',
+} as const;
