@@ -26,7 +26,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: mbstring, pdo_sqlite, sqlite3, intl, bcmath
           coverage: pcov
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
