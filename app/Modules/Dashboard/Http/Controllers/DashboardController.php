@@ -28,7 +28,7 @@ class DashboardController extends Controller
                     ->map(fn (AuditLog $l): array => [
                         'id' => $l->id,
                         'description' => $l->description,
-                        'user' => $l->user?->name ?? $l->actor_name,
+                        'user' => $l->user->name ?? $l->actor_name,
                         'created_at' => $l->created_at->toIso8601String(),
                     ])->all()
                 : [],
