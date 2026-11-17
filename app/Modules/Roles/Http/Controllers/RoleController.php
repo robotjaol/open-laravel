@@ -59,6 +59,7 @@ class RoleController extends Controller
 
         $data = $this->validated($request);
 
+        /** @var Role $role */
         $role = Role::create(['name' => $data['name'], 'guard_name' => 'web']);
         $role->syncPermissions($data['permissions'] ?? []);
         $this->audit->log('roles.created', "Role {$role->name} created", $role, ['permissions' => $data['permissions'] ?? []]);

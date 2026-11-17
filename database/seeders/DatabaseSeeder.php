@@ -26,7 +26,10 @@ class DatabaseSeeder extends Seeder
      */
     private function seedSuperAdmin(): void
     {
+        // Seed-time input only; the seeder never runs from cached config.
+        // @phpstan-ignore larastan.noEnvCallsOutsideOfConfig
         $email = env('SEED_ADMIN_EMAIL');
+        // @phpstan-ignore larastan.noEnvCallsOutsideOfConfig
         $password = env('SEED_ADMIN_PASSWORD');
 
         if (! $email || ! $password || User::role(User::SUPER_ADMIN_ROLE)->exists()) {

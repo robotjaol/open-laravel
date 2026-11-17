@@ -20,7 +20,7 @@ class ProjectFactory extends Factory
     {
         return [
             'code' => strtoupper(fake()->unique()->bothify('PRJ-####')),
-            'name' => fake()->unique()->catchPhrase(),
+            'name' => fake()->unique()->words(3, true),
             'description' => fake()->sentence(),
             'status' => fake()->randomElement(ProjectStatus::cases()),
             'owner_id' => null,

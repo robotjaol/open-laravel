@@ -11,9 +11,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property UserStatus $status
+ * @property Carbon|null $email_verified_at
+ * @property Carbon|null $last_login_at
+ * @property string|null $last_login_ip
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[UseFactory(UserFactory::class)]
 class User extends Authenticatable implements MustVerifyEmail
 {

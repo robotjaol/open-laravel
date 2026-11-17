@@ -9,21 +9,21 @@ use Illuminate\Database\Eloquent\Model;
  *
  * Define `protected array $auditExclude = [...]` on the model to ignore noisy attributes.
  *
- * @mixin Model
+ * @phpstan-require-extends Model
  */
 trait Auditable
 {
     public static function bootAuditable(): void
     {
-        static::created(fn (Model $model) => $model->writeAudit('created', $model->getAttributes()));
+        static::created(fn (self $model) => $model->writeAudit('created', $model->getAttributes()));
 
-        static::updated(function (Model $model): void {
+        static::updated(function (self $model): void {
             $changes = $model->getChanges();
             $old = array_intersect_key($model->getOriginal(), $changes);
             $model->writeAudit('updated', $changes, $old);
         });
 
-        static::deleted(fn (Model $model) => $model->writeAudit('deleted', [], $model->getAttributes()));
+        static::deleted(fn (self $model) => $model->writeAudit('deleted', [], $model->getAttributes()));
     }
 
     /**

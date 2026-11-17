@@ -9,6 +9,8 @@ use LogicException;
 
 /**
  * Append-only audit record. Updates are rejected to protect trail integrity.
+ *
+ * @property User|null $user
  */
 class AuditLog extends Model
 {
